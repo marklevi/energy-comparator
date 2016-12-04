@@ -22,7 +22,6 @@ public class AnnualPlanCostCalculatorTest {
 
         Plan plan = new Plan("eon", "variable", rates, Optional.empty());
 
-
         AnnualPlanCost annualPlanCost = annualPlanCostCalculator.calculate(plan, new BigDecimal("1000"));
 
         assertThat(annualPlanCost.getCost(), is(new BigDecimal("108.68")));

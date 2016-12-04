@@ -5,16 +5,26 @@ import java.util.Optional;
 
 public class AnnualPlanCostCalculator {
 
+    public static final String DOLLAR_DENOMINATION = "100";
     private BigDecimal VAT = new BigDecimal("0.05");
 
     public AnnualPlanCost calculate(Plan plan, BigDecimal annualEnergyConsumption){
-        BigDecimal vatExcludedPrice = getVatExcludedPrice(plan, annualEnergyConsumption);
-        BigDecimal vatIncluded = getVATIncluded(vatExcludedPrice);
-        BigDecimal dollarCost = convertToDollars(vatIncluded);
-        BigDecimal totalCostToTwoDecimalPlaces = dollarCost.setScale(2, BigDecimal.ROUND_CEILING);
 
+        BigDecimal vatExcludedPriceInPence = getVatExcludedPrice(plan, annualEnergyConsumption);
 
-        return new AnnualPlanCost(plan.getSupplier(), plan.getType(), totalCostToTwoDecimalPlaces);
+        BigDecimal vatAmount = vatExcludedPriceInPence.multiply(VAT);
+
+        BigDecimal vatIncludedPriceInPence = vatExcludedPriceInPence.add(vatAmount);
+
+        BigDecimal vatIncludedPriceInDollar = convertToDollars(vatIncludedPriceInPence);
+
+        BigDecimal vatIncludedPriceInDollarRoundedToTwoDecimalPlaces = getPriceRoundedToTwoDecimalPlaces(vatIncludedPriceInDollar);
+
+        return new AnnualPlanCost(plan.getSupplier(), plan.getType(), vatIncludedPriceInDollarRoundedToTwoDecimalPlaces);
+    }
+
+    private BigDecimal getPriceRoundedToTwoDecimalPlaces(BigDecimal vatIncludedPriceInDollar) {
+        return vatIncludedPriceInDollar.setScale(2, BigDecimal.ROUND_CEILING);
     }
 
     private BigDecimal getVatExcludedPrice(Plan plan, BigDecimal annualEnergyConsumption) {
@@ -37,12 +47,7 @@ public class AnnualPlanCostCalculator {
     }
 
     private BigDecimal convertToDollars(BigDecimal vatIncluded) {
-        return vatIncluded.divide(new BigDecimal("100"));
-    }
-
-    private BigDecimal getVATIncluded(BigDecimal cost) {
-        BigDecimal addedVat = BigDecimal.ONE.add(VAT);
-        return cost.multiply(addedVat);
+        return vatIncluded.divide(new BigDecimal(DOLLAR_DENOMINATION));
     }
 
 
