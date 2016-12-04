@@ -20,7 +20,6 @@ public class CalculatePriceCommandTest {
     @Before
     public void setUp() throws Exception {
         List<Plan> plan = getPlan();
-
         calculatePriceCommand = new CalculatePriceCommand(plan);
     }
 
@@ -47,8 +46,6 @@ public class CalculatePriceCommandTest {
         BigDecimal bigDecimal = new BigDecimal("108.675");
         BigDecimal roundedExpectedNumber = bigDecimal.setScale(2, RoundingMode.CEILING);
         assertThat(annualPlanCost.getCost(), is(roundedExpectedNumber));
-
-
     }
 
     private List<Plan> getPlan() {
