@@ -1,8 +1,9 @@
 package com.uswitch.comparator;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 
-public class AnnualPlanCost {
+public class AnnualPlanCost implements Comparable<AnnualPlanCost> {
     private String supplier;
     private String type;
     private BigDecimal cost;
@@ -23,5 +24,10 @@ public class AnnualPlanCost {
 
     public String getSupplier() {
         return supplier;
+    }
+
+    @Override
+    public int compareTo(AnnualPlanCost o) {
+        return this.cost.compareTo(o.cost);
     }
 }

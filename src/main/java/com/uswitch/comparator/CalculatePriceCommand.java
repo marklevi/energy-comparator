@@ -40,16 +40,14 @@ public class CalculatePriceCommand implements Command {
                 .map(this::roundByTwoDecimalPlaces)
                 .collect(Collectors.toList());
 
-        List<AnnualPlanCost> annualPlanCosts = IntStream.range(0, plans.size())
+        return IntStream.range(0, plans.size())
                 .mapToObj(index -> {
                     Plan plan = plans.get(index);
                     BigDecimal planCost = plansCosts.get(index);
                     return new AnnualPlanCost(plan.getSupplier(), plan.getType(), planCost);
                 })
+                .sorted()
                 .collect(Collectors.toList());
-
-        return annualPlanCosts;
-
     }
 
     private BigDecimal roundByTwoDecimalPlaces(BigDecimal vatIncludedPriceInDollar) {
