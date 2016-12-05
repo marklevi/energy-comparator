@@ -1,4 +1,4 @@
-package com.uswitch.comparator;
+package com.energy.comparator;
 
 import java.util.List;
 import java.util.function.Predicate;

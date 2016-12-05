@@ -1,4 +1,4 @@
-package com.uswitch.comparator.utils;
+package com.energy.comparator.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

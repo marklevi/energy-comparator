@@ -1,4 +1,4 @@
-package com.uswitch.comparator;
+package com.energy.comparator;
 
 public interface CommandLineProcessor {
     void process(String line);

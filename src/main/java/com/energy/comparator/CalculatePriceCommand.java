@@ -1,4 +1,6 @@
-package com.uswitch.comparator;
+package com.energy.comparator;
+
+import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -7,14 +9,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.uswitch.comparator.utils.RegexHelper.*;
 import static java.util.regex.Pattern.compile;
 
 public class CalculatePriceCommand implements Command {
     private BigDecimal VAT = new BigDecimal("0.05");
 
     private static String PRICE = "PRICE";
-    private static final Pattern PATTERN = compile("price" + SP + group(PRICE, NUMBER));
+    private static final Pattern PATTERN = compile("price" + RegexHelper.SP + RegexHelper.group(PRICE, RegexHelper.NUMBER));
     private final AnnualPlanCostCalculator annualPlanPriceCalculator;
     private List<Plan> plans;
 
@@ -25,12 +26,12 @@ public class CalculatePriceCommand implements Command {
 
     @Override
     public boolean test(String line) {
-        return matches(PATTERN, line);
+        return RegexHelper.matches(PATTERN, line);
     }
 
     @Override
     public List<AnnualPlanCost> process(String line) {
-        final Matcher matcher = match(PATTERN, line);
+        final Matcher matcher = RegexHelper.match(PATTERN, line);
         String price = matcher.group(PRICE);
 
         List<BigDecimal> plansCosts = plans.stream()

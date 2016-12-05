@@ -1,4 +1,4 @@
-package com.uswitch.comparator;
+package com.energy.comparator;
 
 import org.junit.Before;
 import org.junit.Test;
