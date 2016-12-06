@@ -1,5 +1,8 @@
-package com.energy.comparator;
+package com.energy.comparator.commands;
 
+import com.energy.comparator.AnnualPlanCost;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Predicate;
 

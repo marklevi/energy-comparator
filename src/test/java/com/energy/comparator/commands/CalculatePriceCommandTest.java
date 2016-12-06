@@ -1,12 +1,13 @@
-package com.energy.comparator;
+package com.energy.comparator.commands;
 
+import com.energy.comparator.AnnualPlanCost;
+import com.energy.comparator.Plan;
+import com.energy.comparator.utils.PlanBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +18,7 @@ public class CalculatePriceCommandTest {
 
     @Before
     public void setUp() throws Exception {
-        List<Plan> plans = getPlans();
+        List<Plan> plans = PlanBuilder.getPlans();
         calculatePriceCommand = new CalculatePriceCommand(plans);
     }
 
@@ -60,42 +61,5 @@ public class CalculatePriceCommandTest {
         assertThat(annualPlanCosts.get(1).getSupplier(), is("edf"));
         assertThat(annualPlanCosts.get(2).getSupplier(), is("ovo"));
         assertThat(annualPlanCosts.get(3).getSupplier(), is("bg"));
-    }
-
-    private List<Plan> getPlans() {
-        Plan planOne = getPlanOne();
-        Plan planTwo = getPlanTwo();
-        Plan planThree = getPlanThree();
-        Plan planFour = getPlanFour();
-
-        return Arrays.asList(planOne, planTwo, planThree, planFour);
-    }
-
-    private Plan getPlanFour() {
-        PriceThreshold priceWithoutThreshold = new PriceThreshold(new BigDecimal("9.0"), Optional.empty());
-        List<PriceThreshold> rates = Arrays.asList(priceWithoutThreshold);
-        return new Plan("bg", "standing-charge", rates, Optional.of(new BigDecimal("7.0")));
-    }
-
-    private Plan getPlanThree() {
-        PriceThreshold priceThresholdOne = new PriceThreshold(new BigDecimal("14.5"), Optional.of(new BigDecimal("250")));
-        PriceThreshold priceThresholdTwo = new PriceThreshold(new BigDecimal("10.1"), Optional.of(new BigDecimal("200")));
-        PriceThreshold priceWithoutThreshold = new PriceThreshold(new BigDecimal("9.0"), Optional.empty());
-        List<PriceThreshold> rates = Arrays.asList(priceThresholdOne, priceThresholdTwo, priceWithoutThreshold);
-        return new Plan("edf", "fixed", rates, Optional.empty());
-    }
-
-    private Plan getPlanTwo() {
-        PriceThreshold priceThreshold = new PriceThreshold(new BigDecimal("12.5"), Optional.of(new BigDecimal("300")));
-        PriceThreshold priceWithoutThreshold = new PriceThreshold(new BigDecimal("11.0"), Optional.empty());
-        List<PriceThreshold> rates = Arrays.asList(priceThreshold, priceWithoutThreshold);
-        return new Plan("ovo", "standard", rates, Optional.empty());
-    }
-
-    private Plan getPlanOne() {
-        PriceThreshold priceThreshold = new PriceThreshold(new BigDecimal("13.5"), Optional.of(new BigDecimal("100")));
-        PriceThreshold priceWithoutThreshold = new PriceThreshold(new BigDecimal("10.0"), Optional.empty());
-        List<PriceThreshold> rates = Arrays.asList(priceThreshold, priceWithoutThreshold);
-        return new Plan("eon", "variable", rates, Optional.empty());
     }
 }

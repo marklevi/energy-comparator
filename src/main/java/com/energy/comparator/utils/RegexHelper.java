@@ -5,8 +5,10 @@ import java.util.regex.Pattern;
 
 public class RegexHelper {
 
-    public static String SP = "\\s+";
-    public static String NUMBER = "\\d+";
+    public static final String TYPE = "/variable|standard|fixed|standing-charge/g";
+    public static final String SP = "\\s+";
+    public static final String NUMBER = "\\d+";
+    public static final String SUPPLIER = "eon|ovo|edf|bg";
 
     public static String group(String name, String regex) {
         return String.format("(?<%s>%s)", name, regex);

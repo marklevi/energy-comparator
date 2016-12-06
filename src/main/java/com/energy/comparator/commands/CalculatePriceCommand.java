@@ -1,5 +1,8 @@
-package com.energy.comparator;
+package com.energy.comparator.commands;
 
+import com.energy.comparator.AnnualPlanCost;
+import com.energy.comparator.AnnualPlanCostCalculator;
+import com.energy.comparator.Plan;
 import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
@@ -9,13 +12,15 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.energy.comparator.commands.BigDecimalUtils.applyVAT;
+import static com.energy.comparator.utils.RegexHelper.*;
 import static java.util.regex.Pattern.compile;
 
 public class CalculatePriceCommand implements Command {
-    private BigDecimal VAT = new BigDecimal("0.05");
 
-    private static String PRICE = "PRICE";
-    private static final Pattern PATTERN = compile("price" + RegexHelper.SP + RegexHelper.group(PRICE, RegexHelper.NUMBER));
+
+    private static String ANNUAL_USAGE = "ANNUAL_USAGE";
+    private static final Pattern PATTERN = compile("price" + SP + group(ANNUAL_USAGE, NUMBER));
     private final AnnualPlanCostCalculator annualPlanPriceCalculator;
     private List<Plan> plans;
 
@@ -31,14 +36,14 @@ public class CalculatePriceCommand implements Command {
 
     @Override
     public List<AnnualPlanCost> process(String line) {
-        final Matcher matcher = RegexHelper.match(PATTERN, line);
-        String price = matcher.group(PRICE);
+        final Matcher matcher = match(PATTERN, line);
+        String annualUsage = matcher.group(ANNUAL_USAGE);
 
         List<BigDecimal> plansCosts = plans.stream()
-                .map(plan -> annualPlanPriceCalculator.calculate(plan, new BigDecimal(price)))
-                .map(vatExcludedPriceInPence -> applyVAT(vatExcludedPriceInPence, VAT))
-                .map(this::convertToDollars)
-                .map(this::roundByTwoDecimalPlaces)
+                .map(plan -> annualPlanPriceCalculator.calculate(plan, new BigDecimal(annualUsage)))
+                .map(BigDecimalUtils::applyVAT)
+                .map(BigDecimalUtils::convertPenceToPounds)
+                .map(BigDecimalUtils::roundByTwoDecimalPlaces)
                 .collect(Collectors.toList());
 
         return IntStream.range(0, plans.size())
@@ -51,17 +56,5 @@ public class CalculatePriceCommand implements Command {
                 .collect(Collectors.toList());
     }
 
-    private BigDecimal roundByTwoDecimalPlaces(BigDecimal vatIncludedPriceInDollar) {
-        return vatIncludedPriceInDollar.setScale(2, BigDecimal.ROUND_CEILING);
-    }
-
-    private BigDecimal convertToDollars(BigDecimal vatIncludedPriceInPence) {
-        return vatIncludedPriceInPence.divide(new BigDecimal("100"));
-    }
-
-    private BigDecimal applyVAT(BigDecimal vatExcludedPriceInPence, BigDecimal VAT) {
-        BigDecimal vatAmount = vatExcludedPriceInPence.multiply(VAT);
-        return vatExcludedPriceInPence.add(vatAmount);
-    }
 
 }
