@@ -48,7 +48,6 @@ public class CalculateUsageCommand {
 
         Optional<Plan> plan = plans.stream().filter(p -> p.getSupplier().equals(supplierName)).findFirst();
 
-
         return BigDecimal.valueOf(IntStream.iterate(0, i -> i + 1)
                 .filter(annualEnergyConsumption -> {
                     BigDecimal vatExcludedPriceInPence = annualPlanCostCalculator.calculate(plan.get(), new BigDecimal(Integer.toString(annualEnergyConsumption)));

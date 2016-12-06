@@ -19,7 +19,7 @@ import static java.util.regex.Pattern.compile;
 public class CalculatePriceCommand implements Command {
 
 
-    private static String ANNUAL_USAGE = "ANNUAL_USAGE";
+    private static String ANNUAL_USAGE = "USAGE";
     private static final Pattern PATTERN = compile("price" + SP + group(ANNUAL_USAGE, NUMBER));
     private final AnnualPlanCostCalculator annualPlanPriceCalculator;
     private List<Plan> plans;

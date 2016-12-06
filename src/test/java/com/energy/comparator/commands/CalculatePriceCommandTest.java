@@ -55,11 +55,20 @@ public class CalculatePriceCommandTest {
     }
 
     @Test
-    public void shouldRankPricesFromTheCheapestToTheMostExpensive() throws Exception {
+    public void shouldRankPricesFromTheCheapestToTheMostExpensiveWithPrice1000() throws Exception {
         List<AnnualPlanCost> annualPlanCosts = calculatePriceCommand.process("price 1000");
         assertThat(annualPlanCosts.get(0).getSupplier(), is("eon"));
         assertThat(annualPlanCosts.get(1).getSupplier(), is("edf"));
         assertThat(annualPlanCosts.get(2).getSupplier(), is("ovo"));
         assertThat(annualPlanCosts.get(3).getSupplier(), is("bg"));
+    }
+
+    @Test
+    public void shouldRankPricesFromTheCheapestToTheMostExpensiveWithPrice2000() throws Exception {
+        List<AnnualPlanCost> annualPlanCosts = calculatePriceCommand.process("price 2000");
+        assertThat(annualPlanCosts.get(0).getCost(), is(new BigDecimal("205.75")));
+        assertThat(annualPlanCosts.get(1).getCost(), is(new BigDecimal("213.68")));
+        assertThat(annualPlanCosts.get(2).getCost(), is(new BigDecimal("215.83")));
+        assertThat(annualPlanCosts.get(3).getCost(), is(new BigDecimal("235.73")));
     }
 }
