@@ -11,9 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static com.energy.comparator.commands.BigDecimalUtils.applyVAT;
-import static com.energy.comparator.commands.BigDecimalUtils.convertPenceToPounds;
-import static com.energy.comparator.commands.BigDecimalUtils.roundByTwoDecimalPlaces;
+import static com.energy.comparator.utils.BigDecimalUtils.*;
 import static com.energy.comparator.utils.RegexHelper.*;
 import static java.util.regex.Pattern.compile;
 
@@ -22,6 +20,7 @@ public class CalculateUsageCommand {
     private static final String SUPPLIER_NAME = "SUPPLIER";
     private static final String TYPE_NAME = "TYPE";
     private static final String MONTHLY_SPEND = "SPEND";
+
     private static final Pattern PATTERN = compile("usage" + SP
                                                     + group(SUPPLIER_NAME, SUPPLIER) + SP
                                                     + group(TYPE_NAME, RegexHelper.TYPE) + SP
@@ -53,11 +52,12 @@ public class CalculateUsageCommand {
                     BigDecimal vatExcludedPriceInPence = annualPlanCostCalculator.calculate(plan.get(), new BigDecimal(Integer.toString(annualEnergyConsumption)));
                     BigDecimal vatIncludedPriceInPence = applyVAT(vatExcludedPriceInPence);
                     BigDecimal pounds = convertPenceToPounds(vatIncludedPriceInPence);
-                    BigDecimal roundedPound = roundByTwoDecimalPlaces(pounds);
+                    BigDecimal roundedPound = roundToNearestInteger(pounds);
                     return roundedPound.equals(annualSpend);
                 })
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Unable to find energy consumption based on monthly spending")));
+                .findFirst().getAsInt());
     }
+
+
 
 }

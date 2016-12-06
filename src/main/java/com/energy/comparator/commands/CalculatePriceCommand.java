@@ -3,6 +3,7 @@ package com.energy.comparator.commands;
 import com.energy.comparator.AnnualPlanCost;
 import com.energy.comparator.AnnualPlanCostCalculator;
 import com.energy.comparator.Plan;
+import com.energy.comparator.utils.BigDecimalUtils;
 import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
@@ -12,7 +13,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.energy.comparator.commands.BigDecimalUtils.applyVAT;
 import static com.energy.comparator.utils.RegexHelper.*;
 import static java.util.regex.Pattern.compile;
 
@@ -55,6 +55,8 @@ public class CalculatePriceCommand implements Command {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
+
 
 
 }
