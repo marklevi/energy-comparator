@@ -56,7 +56,8 @@ public class CalculateUsageCommand implements Command {
                     BigDecimal vatIncludedPriceInPoundsRounded = roundToNearestInteger(vatIncludedPriceInPounds);
                     return vatIncludedPriceInPoundsRounded.equals(annualSpend);
                 })
-                .findFirst()
+                .limit(11)
+                .max()
                 .getAsInt()));
     }
 

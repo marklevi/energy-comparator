@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class RegexHelper {
 
-    public static final String TYPE = "/variable|standard|fixed|standing-charge/g";
+    public static final String TYPE = "variable|standard|fixed|standing-charge";
     public static final String SP = "\\s+";
     public static final String NUMBER = "\\d+";
     public static final String SUPPLIER = "eon|ovo|edf|bg";
