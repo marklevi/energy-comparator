@@ -2,6 +2,8 @@ package com.energy.comparator;
 
 import java.math.BigDecimal;
 
+import static java.lang.String.format;
+
 public class AnnualPlanCost implements Comparable<AnnualPlanCost> {
     private String supplier;
     private String type;
@@ -23,6 +25,11 @@ public class AnnualPlanCost implements Comparable<AnnualPlanCost> {
 
     public String getSupplier() {
         return supplier;
+    }
+
+    @Override
+    public String toString() {
+        return format("%s,%s,%s", supplier, type, cost);
     }
 
     @Override

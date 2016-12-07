@@ -1,5 +1,7 @@
 package com.energy.comparator.commands;
 
-public interface CommandLineProcessor {
-    void process(String line);
+public class CommandLineProcessor {
+    public void process(String line){
+
+    }
 }

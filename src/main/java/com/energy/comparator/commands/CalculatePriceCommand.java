@@ -35,7 +35,7 @@ public class CalculatePriceCommand implements Command {
     }
 
     @Override
-    public List<AnnualPlanCost> process(String line) {
+    public List<String> process(String line) {
         final Matcher matcher = match(PATTERN, line);
         String annualUsage = matcher.group(ANNUAL_USAGE);
 
@@ -53,10 +53,8 @@ public class CalculatePriceCommand implements Command {
                     return new AnnualPlanCost(plan.getSupplier(), plan.getType(), planCost);
                 })
                 .sorted()
+                .map(AnnualPlanCost::toString)
                 .collect(Collectors.toList());
     }
-
-
-
 
 }

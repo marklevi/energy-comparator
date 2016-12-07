@@ -19,9 +19,9 @@ public class CalculateUsageCommandTest {
         List<Plan> plans = getPlans();
         CalculateUsageCommand calculateUsageCommand = new CalculateUsageCommand(new AnnualPlanCostCalculator(), plans);
 
-        BigDecimal annualEnergyConsumption = calculateUsageCommand.process("usage ovo standard 1000");
+        List<String> annualEnergyConsumption = calculateUsageCommand.process("usage ovo standard 1000");
 
-        assertThat(annualEnergyConsumption, is(new BigDecimal("103855")));
+        assertThat(annualEnergyConsumption.get(0), is("103855"));
 
     }
 }

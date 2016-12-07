@@ -11,6 +11,6 @@ public interface Command extends Predicate<String> {
     @Override
     boolean test(String line);
 
-    List<AnnualPlanCost> process(String line);
+    List<String> process(String line);
 
 }

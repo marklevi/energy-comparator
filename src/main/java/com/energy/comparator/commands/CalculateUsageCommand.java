@@ -5,6 +5,7 @@ import com.energy.comparator.Plan;
 import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -15,7 +16,7 @@ import static com.energy.comparator.utils.BigDecimalUtils.*;
 import static com.energy.comparator.utils.RegexHelper.*;
 import static java.util.regex.Pattern.compile;
 
-public class CalculateUsageCommand {
+public class CalculateUsageCommand implements Command {
 
     private static final String SUPPLIER_NAME = "SUPPLIER";
     private static final String TYPE_NAME = "TYPE";
@@ -38,24 +39,25 @@ public class CalculateUsageCommand {
         return matches(PATTERN, line);
     }
 
-    public BigDecimal process(String line) {
+    public List<String> process(String line) {
         Matcher matcher = match(PATTERN, line);
-        String monthlySpend = matcher.group(MONTHLY_SPEND);
+        String monthlySpend = (matcher.group(MONTHLY_SPEND));
         String supplierName = matcher.group(SUPPLIER_NAME);
 
         BigDecimal annualSpend = new BigDecimal(monthlySpend).multiply(new BigDecimal("12"));
 
         Optional<Plan> plan = plans.stream().filter(p -> p.getSupplier().equals(supplierName)).findFirst();
 
-        return BigDecimal.valueOf(IntStream.iterate(0, i -> i + 1)
+        return Arrays.asList(String.valueOf(IntStream.iterate(0, i -> i + 1)
                 .filter(annualEnergyConsumption -> {
                     BigDecimal vatExcludedPriceInPence = annualPlanCostCalculator.calculate(plan.get(), new BigDecimal(Integer.toString(annualEnergyConsumption)));
                     BigDecimal vatIncludedPriceInPence = applyVAT(vatExcludedPriceInPence);
-                    BigDecimal pounds = convertPenceToPounds(vatIncludedPriceInPence);
-                    BigDecimal roundedPound = roundToNearestInteger(pounds);
-                    return roundedPound.equals(annualSpend);
+                    BigDecimal vatIncludedPriceInPounds = convertPenceToPounds(vatIncludedPriceInPence);
+                    BigDecimal vatIncludedPriceInPoundsRounded = roundToNearestInteger(vatIncludedPriceInPounds);
+                    return vatIncludedPriceInPoundsRounded.equals(annualSpend);
                 })
-                .findFirst().getAsInt());
+                .findFirst()
+                .getAsInt()));
     }
 
 
