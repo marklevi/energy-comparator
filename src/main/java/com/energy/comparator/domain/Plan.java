@@ -1,6 +1,7 @@
 package com.energy.comparator.domain;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,14 @@ public class Plan {
 
     public List<PriceThreshold> getRates() {
         return rates;
+    }
+
+    public int getRatesSize() {
+        return rates.size();
+    }
+
+    public Iterator<PriceThreshold> getRate(){
+        return rates.iterator();
     }
 
     public Optional<BigDecimal> getStandingCharge() {

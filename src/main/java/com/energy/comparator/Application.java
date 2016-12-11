@@ -26,20 +26,15 @@ public class Application {
 
     private void run(String[] args) throws IOException {
         if (args.length < 1) {
-            throw new RuntimeException("No file received");
-        } else {
-            String inputFileName = args[0];
-            run(inputFileName);
+            throw new RuntimeException("Missing arguments");
         }
+        String inputFileName = args[0];
+        run(inputFileName);
     }
 
     private void run(String inputFileName) {
-        Path inputFilePath = Paths.get(inputFileName);
-        List<Plan> plans = new PlanParser().parse(inputFilePath);
-        List<Command> commands = getCommands(plans);
-
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_TXT))){
-            CommandLineProcessor commandLineProcessor = new CommandLineProcessor(commands, getOutputHandler(writer));
+            CommandLineProcessor commandLineProcessor = new CommandLineProcessor(getCommands(inputFileName), getOutputHandler(writer));
 
             Scanner input = new Scanner(System.in);
             while (input.hasNextLine()) {
@@ -67,14 +62,20 @@ public class Application {
         };
     }
 
-    private void terminateApplication() {
-        System.exit(1);
+    private List<Command> getCommands(String inputFileName) {
+        Path inputFilePath = Paths.get(inputFileName);
+        List<Plan> plans = new PlanParser().parse(inputFilePath);
+        return getSupportedCommands(plans);
     }
 
-    private List<Command> getCommands(List<Plan> plans) {
-        CalculatePriceCommand calculatePriceCommand = new CalculatePriceCommand(plans, new AnnualPlanCostCalculator());
-        CalculateUsageCommand calculateUsageCommand = new CalculateUsageCommand(plans, new AnnualPlanCostCalculator());
-        ExitCommand exitCommand = new ExitCommand();
-        return Arrays.asList(calculatePriceCommand, calculateUsageCommand, exitCommand);
+    private List<Command> getSupportedCommands(List<Plan> plans) {
+        return Arrays.asList(
+                new CalculatePriceCommand(plans, new AnnualPlanCostCalculator()),
+                new CalculateUsageCommand(plans, new AnnualPlanCostCalculator()),
+                new ExitCommand());
+    }
+
+    private void terminateApplication() {
+        System.exit(1);
     }
 }

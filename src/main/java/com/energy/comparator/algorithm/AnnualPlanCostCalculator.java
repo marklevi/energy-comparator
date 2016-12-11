@@ -2,35 +2,47 @@ package com.energy.comparator.algorithm;
 
 import com.energy.comparator.domain.Plan;
 import com.energy.comparator.domain.PriceThreshold;
+import jdk.nashorn.internal.runtime.arrays.IteratorAction;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.Optional;
+
+import static com.energy.comparator.utils.BigDecimalUtils.add;
+import static com.energy.comparator.utils.BigDecimalUtils.multiply;
+import static com.energy.comparator.utils.BigDecimalUtils.subtract;
 
 public class AnnualPlanCostCalculator {
 
-    public static final String DAYS_IN_YEAR = "365";
+    private static final String DAYS_IN_YEAR = "365";
 
-    public BigDecimal calculate(Plan plan, BigDecimal annualEnergyConsumption){
-        BigDecimal cost = BigDecimal.ZERO;
-        BigDecimal remainingEnergyConsumption = annualEnergyConsumption;
 
-        for (PriceThreshold rate : plan.getRates()) {
-            Optional<BigDecimal> thresholdUnit = rate.getThresholdValue();
-            if(thresholdUnit.isPresent()){
-                if(remainingEnergyConsumption.compareTo(thresholdUnit.get()) == 1){
-                    BigDecimal costUntilThreshold = thresholdUnit.get().multiply(rate.getPricePerKilowattHour());
-                    cost = cost.add(costUntilThreshold);
-                    remainingEnergyConsumption = remainingEnergyConsumption.subtract(thresholdUnit.get());
-                }
-            }else {
-                cost = cost.add(rate.getPricePerKilowattHour().multiply(remainingEnergyConsumption));
-            }
+    public BigDecimal calculate(Plan plan, BigDecimal annualEnergyConsumption) {
+        BigDecimal cost = getPreStandingChargeCostRecursively(plan, plan.getRate(), annualEnergyConsumption, BigDecimal.ZERO);
+
+        if (plan.getStandingCharge().isPresent()) {
+            return add(cost,  multiply(plan.getStandingCharge().orElse(BigDecimal.ZERO), new BigDecimal(DAYS_IN_YEAR)));
         }
 
-        if(plan.getStandingCharge().isPresent()){
-            cost = cost.add(plan.getStandingCharge().get().multiply(new BigDecimal(DAYS_IN_YEAR)));
-        }
         return cost;
     }
 
+    private BigDecimal getPreStandingChargeCostRecursively(Plan plan, Iterator<PriceThreshold> iterator, BigDecimal remainingEnergyConsumption, BigDecimal cost) {
+        if (remainingEnergyConsumption.equals(BigDecimal.ZERO)) {
+            return cost;
+        }
+
+        if (iterator.hasNext()) {
+            PriceThreshold rate = iterator.next();
+            Optional<BigDecimal> thresholdValue = rate.getThresholdValue();
+            if (thresholdValue.isPresent() && remainingEnergyConsumption.compareTo(thresholdValue.get()) == 1) {
+                BigDecimal addedCost = multiply(rate.getPricePerKilowattHour(), thresholdValue.get());
+                return getPreStandingChargeCostRecursively(plan, iterator, subtract(remainingEnergyConsumption, thresholdValue.get()), add(cost, addedCost));
+            } else {
+                BigDecimal addedCost = multiply(rate.getPricePerKilowattHour(), remainingEnergyConsumption);
+                return getPreStandingChargeCostRecursively(plan, iterator, BigDecimal.ZERO, add(cost, addedCost));
+            }
+        }
+        return cost;
+    }
 }

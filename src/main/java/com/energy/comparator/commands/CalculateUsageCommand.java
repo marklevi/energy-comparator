@@ -23,8 +23,8 @@ public class CalculateUsageCommand implements Command {
     private static final String MONTHS_IN_YEAR = "12";
     private static final String SUPPLIER_NAME = "SUPPLIER";
     private static final String TYPE_NAME = "TYPE";
-
     private static final String MONTHLY_SPEND = "SPEND";
+
     private static final Pattern PATTERN = compile("usage" + SP
                                                     + group(SUPPLIER_NAME, SUPPLIER) + SP
                                                     + group(TYPE_NAME, RegexHelper.TYPE) + SP
@@ -47,11 +47,12 @@ public class CalculateUsageCommand implements Command {
         String monthlySpend = (matcher.group(MONTHLY_SPEND));
         String supplierName = matcher.group(SUPPLIER_NAME);
 
-        BigDecimal annualSpend = multiply(monthlySpend, MONTHS_IN_YEAR);
+        BigDecimal annualSpend = multiply(monthlySpend, MONTHS_IN_YEAR).setScale(1);
 
         Optional<Plan> plan = plans.stream().filter(p -> p.getSupplier().equals(supplierName)).findFirst();
 
-        return Collections.singletonList(String.valueOf(IntStream.iterate(0, i -> i + 1)
+        return Collections.singletonList(String.valueOf(
+                IntStream.iterate(0, i -> i + 1)
                 .filter(annualEnergyConsumption -> {
                     BigDecimal vatExcludedPriceInPence = annualPlanCostCalculator.calculate(plan.get(), new BigDecimal(Integer.toString(annualEnergyConsumption)));
                     BigDecimal vatIncludedPriceInPence = add(calculateVat(vatExcludedPriceInPence, VAT), vatExcludedPriceInPence);

@@ -48,6 +48,23 @@ public class AnnualPlanCostCalculatorTest {
     }
 
     @Test
+    public void shouldChargeStartingFromFirstThreshold() throws Exception {
+        AnnualPlanCostCalculator annualPlanCostCalculator = new AnnualPlanCostCalculator();
+
+        PriceThreshold priceWithThreshold = new PriceThreshold(new BigDecimal("20.0"), Optional.of(new BigDecimal("50")));
+        PriceThreshold priceWithoutThreshold = new PriceThreshold(new BigDecimal("10.0"), Optional.empty());
+
+        List<PriceThreshold> rates = Arrays.asList(priceWithThreshold, priceWithoutThreshold);
+
+        Plan plan = new Plan("eon", "variable", rates, Optional.empty());
+
+        BigDecimal annualPlanCost = annualPlanCostCalculator.calculate(plan, new BigDecimal("10"));
+
+        assertThat(annualPlanCost, is(new BigDecimal("200.0")));
+
+    }
+
+    @Test
     public void shouldCalculateAnnualPlanCostWithMoreThanOneThreshold() throws Exception {
         AnnualPlanCostCalculator annualPlanCostCalculator = new AnnualPlanCostCalculator();
 
