@@ -1,3 +1,6 @@
+By Mark Levi
+
+
 How to run the program:
 
 ./gradlew distTar
