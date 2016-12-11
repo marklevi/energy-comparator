@@ -1,6 +1,6 @@
 package com.energy.comparator.parser;
 
-import com.energy.comparator.PriceThreshold;
+import com.energy.comparator.domain.PriceThreshold;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -15,7 +15,7 @@ public class PriceThresholdDTO {
     private BigDecimal threshold;
 
     public PriceThresholdDTO() {
-        /* */
+        /* for jackson */
     }
 
     public PriceThreshold build(){

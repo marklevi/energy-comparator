@@ -1,7 +1,4 @@
-package com.energy.comparator;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.energy.comparator.domain;
 
 import java.math.BigDecimal;
 import java.util.List;

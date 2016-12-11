@@ -1,7 +1,7 @@
 package com.energy.comparator.commands;
 
-import com.energy.comparator.AnnualPlanCostCalculator;
-import com.energy.comparator.Plan;
+import com.energy.comparator.algorithm.AnnualPlanCostCalculator;
+import com.energy.comparator.domain.Plan;
 import com.energy.comparator.utils.PlanBuilder;
 import org.junit.Before;
 import org.junit.Test;

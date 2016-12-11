@@ -1,6 +1,8 @@
 package com.energy.comparator;
 
+import com.energy.comparator.algorithm.AnnualPlanCostCalculator;
 import com.energy.comparator.commands.*;
+import com.energy.comparator.domain.Plan;
 import com.energy.comparator.exceptions.ExitCommandException;
 import com.energy.comparator.parser.PlanParser;
 

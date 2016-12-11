@@ -1,8 +1,7 @@
 package com.energy.comparator.parser;
 
-import com.energy.comparator.Plan;
-import com.energy.comparator.PriceThreshold;
-import com.energy.comparator.parser.PlanParser;
+import com.energy.comparator.domain.Plan;
+import com.energy.comparator.domain.PriceThreshold;
 import org.junit.Ignore;
 import org.junit.Test;
 

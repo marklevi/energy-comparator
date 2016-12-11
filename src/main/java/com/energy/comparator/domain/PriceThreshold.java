@@ -1,4 +1,4 @@
-package com.energy.comparator;
+package com.energy.comparator.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;

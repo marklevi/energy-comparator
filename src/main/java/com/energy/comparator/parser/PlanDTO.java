@@ -1,10 +1,8 @@
 package com.energy.comparator.parser;
 
-import com.energy.comparator.Plan;
-import com.energy.comparator.PriceThreshold;
+import com.energy.comparator.domain.Plan;
+import com.energy.comparator.domain.PriceThreshold;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.math.BigDecimal;
 import java.util.List;

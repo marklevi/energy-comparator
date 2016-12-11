@@ -1,4 +1,7 @@
-package com.energy.comparator;
+package com.energy.comparator.algorithm;
+
+import com.energy.comparator.domain.Plan;
+import com.energy.comparator.domain.PriceThreshold;
 
 import java.math.BigDecimal;
 import java.util.Optional;

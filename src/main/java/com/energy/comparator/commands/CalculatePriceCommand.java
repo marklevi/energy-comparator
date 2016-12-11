@@ -1,8 +1,8 @@
 package com.energy.comparator.commands;
 
-import com.energy.comparator.AnnualPlanCost;
-import com.energy.comparator.AnnualPlanCostCalculator;
-import com.energy.comparator.Plan;
+import com.energy.comparator.domain.AnnualPlanCost;
+import com.energy.comparator.algorithm.AnnualPlanCostCalculator;
+import com.energy.comparator.domain.Plan;
 import com.energy.comparator.utils.BigDecimalUtils;
 
 import java.math.BigDecimal;
@@ -12,11 +12,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.energy.comparator.utils.BigDecimalUtils.add;
 import static com.energy.comparator.utils.RegexHelper.*;
+import static com.energy.comparator.utils.VatCalculator.VAT;
+import static com.energy.comparator.utils.VatCalculator.calculateVat;
 import static java.util.regex.Pattern.compile;
 
 public class CalculatePriceCommand implements Command {
-
 
     private static String ANNUAL_USAGE = "USAGE";
     private static final Pattern PATTERN = compile("price" + SP + group(ANNUAL_USAGE, NUMBER));
@@ -40,7 +42,7 @@ public class CalculatePriceCommand implements Command {
 
         List<BigDecimal> plansCosts = plans.stream()
                 .map(plan -> annualPlanPriceCalculator.calculate(plan, new BigDecimal(annualUsage)))
-                .map(BigDecimalUtils::applyVAT)
+                .map(vatExcludedPriceInPence -> add(calculateVat(vatExcludedPriceInPence, VAT), vatExcludedPriceInPence))
                 .map(BigDecimalUtils::convertPenceToPounds)
                 .map(BigDecimalUtils::roundByTwoDecimalPlaces)
                 .collect(Collectors.toList());

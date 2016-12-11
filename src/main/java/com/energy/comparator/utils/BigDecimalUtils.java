@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public class BigDecimalUtils {
 
-    private static BigDecimal VAT = new BigDecimal("0.05");
     private static final BigDecimal BASE_100 = new BigDecimal("100");
 
     public static BigDecimal roundByTwoDecimalPlaces(BigDecimal number) {
@@ -14,13 +13,11 @@ public class BigDecimalUtils {
         return number.setScale(0, BigDecimal.ROUND_CEILING);
     }
 
+    public static BigDecimal add(BigDecimal x, BigDecimal y){
+        return x.add(y);
+    }
     public static BigDecimal convertPenceToPounds(BigDecimal pence) {
         return pence.divide(BASE_100);
-    }
-
-    public static BigDecimal applyVAT(BigDecimal vatExcludedPriceInPence) {
-        BigDecimal vatAmount = vatExcludedPriceInPence.multiply(VAT);
-        return vatExcludedPriceInPence.add(vatAmount);
     }
 
     public static BigDecimal multiply(String x, String y){

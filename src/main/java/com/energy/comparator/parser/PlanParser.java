@@ -1,6 +1,6 @@
 package com.energy.comparator.parser;
 
-import com.energy.comparator.Plan;
+import com.energy.comparator.domain.Plan;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

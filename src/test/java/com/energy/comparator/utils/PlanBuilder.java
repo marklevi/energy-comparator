@@ -1,7 +1,7 @@
 package com.energy.comparator.utils;
 
-import com.energy.comparator.Plan;
-import com.energy.comparator.PriceThreshold;
+import com.energy.comparator.domain.Plan;
+import com.energy.comparator.domain.PriceThreshold;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
