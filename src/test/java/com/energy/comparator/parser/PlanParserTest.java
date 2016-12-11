@@ -17,11 +17,10 @@ import static org.junit.Assert.*;
 
 public class PlanParserTest {
 
-    @Ignore
     @Test
     public void shouldBeAbleToParsePlansInput() throws Exception {
         PlanParser planParser = new PlanParser();
-        String pathString = "/Users/mlevi/Desktop/nuswitch/energy-comparitor/plans.json";
+        String pathString = "plans.json";
         Path path = Paths.get(pathString);
         List<Plan> plans = planParser.parse(path);
 
