@@ -14,8 +14,8 @@ import java.util.stream.IntStream;
 
 import static com.energy.comparator.utils.BigDecimalUtils.*;
 import static com.energy.comparator.utils.RegexHelper.*;
-import static com.energy.comparator.utils.VatCalculator.VAT;
-import static com.energy.comparator.utils.VatCalculator.calculateVat;
+import static com.energy.comparator.algorithm.VatCalculator.VAT;
+import static com.energy.comparator.algorithm.VatCalculator.calculateVat;
 import static java.util.regex.Pattern.compile;
 
 public class CalculateUsageCommand implements Command {

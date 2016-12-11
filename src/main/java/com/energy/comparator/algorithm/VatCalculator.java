@@ -1,4 +1,4 @@
-package com.energy.comparator.utils;
+package com.energy.comparator.algorithm;
 
 import java.math.BigDecimal;
 
