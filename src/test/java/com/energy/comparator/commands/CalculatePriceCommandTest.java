@@ -1,12 +1,11 @@
 package com.energy.comparator.commands;
 
-import com.energy.comparator.AnnualPlanCost;
+import com.energy.comparator.AnnualPlanCostCalculator;
 import com.energy.comparator.Plan;
 import com.energy.comparator.utils.PlanBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -19,7 +18,7 @@ public class CalculatePriceCommandTest {
     @Before
     public void setUp() throws Exception {
         List<Plan> plans = PlanBuilder.getPlans();
-        calculatePriceCommand = new CalculatePriceCommand(plans);
+        calculatePriceCommand = new CalculatePriceCommand(plans, new AnnualPlanCostCalculator());
     }
 
     @Test

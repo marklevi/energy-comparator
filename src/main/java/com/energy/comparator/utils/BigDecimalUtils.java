@@ -23,5 +23,9 @@ public class BigDecimalUtils {
         return vatExcludedPriceInPence.add(vatAmount);
     }
 
+    public static BigDecimal multiply(String x, String y){
+        return new BigDecimal(x).multiply(new BigDecimal(y));
+    }
+
 
 }

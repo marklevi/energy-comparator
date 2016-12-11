@@ -4,7 +4,6 @@ import com.energy.comparator.AnnualPlanCost;
 import com.energy.comparator.AnnualPlanCostCalculator;
 import com.energy.comparator.Plan;
 import com.energy.comparator.utils.BigDecimalUtils;
-import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,14 +23,14 @@ public class CalculatePriceCommand implements Command {
     private final AnnualPlanCostCalculator annualPlanPriceCalculator;
     private List<Plan> plans;
 
-    public CalculatePriceCommand(List<Plan> plans) {
+    public CalculatePriceCommand(List<Plan> plans, AnnualPlanCostCalculator annualPlanCostCalculator) {
         this.plans = plans;
-        this.annualPlanPriceCalculator = new AnnualPlanCostCalculator();
+        this.annualPlanPriceCalculator = annualPlanCostCalculator;
     }
 
     @Override
     public boolean test(String line) {
-        return RegexHelper.matches(PATTERN, line);
+        return matches(PATTERN, line);
     }
 
     @Override

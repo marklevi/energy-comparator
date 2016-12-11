@@ -5,7 +5,7 @@ import com.energy.comparator.Plan;
 import com.energy.comparator.utils.RegexHelper;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -18,10 +18,11 @@ import static java.util.regex.Pattern.compile;
 
 public class CalculateUsageCommand implements Command {
 
+    public static final String MONTHS_IN_YEAR = "12";
     private static final String SUPPLIER_NAME = "SUPPLIER";
     private static final String TYPE_NAME = "TYPE";
-    private static final String MONTHLY_SPEND = "SPEND";
 
+    private static final String MONTHLY_SPEND = "SPEND";
     private static final Pattern PATTERN = compile("usage" + SP
                                                     + group(SUPPLIER_NAME, SUPPLIER) + SP
                                                     + group(TYPE_NAME, RegexHelper.TYPE) + SP
@@ -30,7 +31,7 @@ public class CalculateUsageCommand implements Command {
     private AnnualPlanCostCalculator annualPlanCostCalculator;
     private List<Plan> plans;
 
-    public CalculateUsageCommand(AnnualPlanCostCalculator annualPlanCostCalculator, List<Plan> plans) {
+    public CalculateUsageCommand(List<Plan> plans, AnnualPlanCostCalculator annualPlanCostCalculator) {
         this.annualPlanCostCalculator = annualPlanCostCalculator;
         this.plans = plans;
     }
@@ -44,11 +45,11 @@ public class CalculateUsageCommand implements Command {
         String monthlySpend = (matcher.group(MONTHLY_SPEND));
         String supplierName = matcher.group(SUPPLIER_NAME);
 
-        BigDecimal annualSpend = new BigDecimal(monthlySpend).multiply(new BigDecimal("12"));
+        BigDecimal annualSpend = multiply(monthlySpend, MONTHS_IN_YEAR);
 
         Optional<Plan> plan = plans.stream().filter(p -> p.getSupplier().equals(supplierName)).findFirst();
 
-        return Arrays.asList(String.valueOf(IntStream.iterate(0, i -> i + 1)
+        return Collections.singletonList(String.valueOf(IntStream.iterate(0, i -> i + 1)
                 .filter(annualEnergyConsumption -> {
                     BigDecimal vatExcludedPriceInPence = annualPlanCostCalculator.calculate(plan.get(), new BigDecimal(Integer.toString(annualEnergyConsumption)));
                     BigDecimal vatIncludedPriceInPence = applyVAT(vatExcludedPriceInPence);
@@ -56,7 +57,7 @@ public class CalculateUsageCommand implements Command {
                     BigDecimal vatIncludedPriceInPoundsRounded = roundToNearestInteger(vatIncludedPriceInPounds);
                     return vatIncludedPriceInPoundsRounded.equals(annualSpend);
                 })
-                .limit(11)
+                .limit(1)
                 .max()
                 .getAsInt()));
     }

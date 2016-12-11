@@ -1,5 +1,9 @@
 package com.energy.comparator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -18,6 +22,16 @@ public class PriceThreshold {
 
     public BigDecimal getPricePerKilowattHour() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
 
